@@ -1,5 +1,5 @@
 <template>
-  <li :class="$style.item" @click="showInput(index)">
+  <li :class="$style.item">
     <div :class="$style.task">
       <label>
         <input
@@ -10,7 +10,7 @@
         />
         <span :class="$style.customInput"></span>
       </label>
-      <div :class="$style.task">
+      <div @click="showInput(index)" :class="$style.task">
         {{ todo.title | upperCase }}
       </div>
       <button @click="removeTask(todo.id)" :class="$style.button">
