@@ -6,7 +6,6 @@
         <div :class="$style.content">
           <TodoList />
           <Input />
-          <div>{{ getLength }}</div>
         </div>
         <Footer />
       </div>
@@ -19,7 +18,7 @@ import Header from "@/components/atoms/Header";
 import TodoList from "@/components/organisms/TodoList";
 import Footer from "@/components/organisms/Footer";
 import Input from "@/components/organisms/Input";
-import { mapGetters } from "vuex";
+
 export default {
   name: "App",
   components: {
@@ -28,7 +27,6 @@ export default {
     Footer,
     Input,
   },
-  computed: mapGetters(["getLength"]),
 };
 </script>
 

@@ -1,22 +1,73 @@
 <template>
-  <li :class="$style.item">
-    <label> &check; <input :class="$style.input" type="checkbox" /></label>
+  <li :class="$style.item" @click="showInput(index)">
     <div :class="$style.task">
-      {{ todo.title }}
+      <label>
+        <input
+          @change="changeComp(todo.id)"
+          :checked="todo.completed"
+          :class="$style.input"
+          type="checkbox"
+        />
+        <span :class="$style.customInput"></span>
+      </label>
+      <div :class="$style.task">
+        {{ todo.title | upperCase }}
+      </div>
+      <button @click="removeTask(todo.id)" :class="$style.button">
+        &times;
+      </button>
     </div>
-    <button @click="removeTask(todo.id)" :class="$style.button">&times;</button>
+    <div :class="[$style.subtask, { [$style.show]: index === getActiveTask }]">
+      <ul></ul>
+      <form @submit.prevent="submit">
+        <input type="text" placeholder="Add new task" v-model="title" />
+      </form>
+    </div>
   </li>
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 
 export default {
   methods: {
-    ...mapMutations(["deleteTask"]),
+    ...mapMutations([
+      "deleteTask",
+      "changeCompleted",
+      "setActiveTask",
+      "createSubTask",
+      "pushSubTask",
+    ]),
     removeTask(id) {
-      console.log(id);
       this.deleteTask(id);
+    },
+    changeComp(id) {
+      this.changeCompleted(id);
+    },
+    showInput(i) {
+      this.setActiveTask(i);
+      console.log(i);
+    },
+    submit() {
+      // вот здесь мне непонятно, как установить зависимость от геттера) Просто я хочу проверить, если есть поле сабзадач, я буду в него пушить, а нету, я создам. Можешь подскажешь идею)
+      // if ( getExistSubTask  === -1) {
+      //   this.createSubTask({
+      //     id: Date.now(),
+      //     title: this.title,
+      //     completed: false,
+      //   });
+      // } else {
+      //   this.pushSubTask({
+      //     id: Date.now(),
+      //     title: this.title,
+      //     completed: false,
+      //   });
+      // }
+      this.createSubTask({
+        id: Date.now(),
+        title: this.title,
+        completed: false,
+      });
     },
   },
   props: {
@@ -24,6 +75,20 @@ export default {
       type: Object,
       completed: true,
     },
+    index: Number,
+  },
+  data() {
+    return {
+      title: "",
+    };
+  },
+  filters: {
+    upperCase(value) {
+      return value[0].toUpperCase() + value.slice(1);
+    },
+  },
+  computed: {
+    ...mapGetters(["getActiveTask", "getExistSubTask"]),
   },
 };
 </script>
@@ -31,7 +96,6 @@ export default {
 <style lang="scss" module>
 @import "../../assets/styles/index.scss";
 .item {
-  display: flex;
   align-items: center;
   background-color: $color-item;
   color: $color-brown;
@@ -50,9 +114,8 @@ export default {
   background: transparent;
   color: $color-header-footer;
 }
-button:hover {
-  color: $color-button-pressed;
-  border: solid 1.5px $color-button-pressed;
+.button:hover {
+  @include hover;
 }
 .done {
   text-decoration: line-through;
@@ -60,12 +123,30 @@ button:hover {
 .input {
   display: none;
 }
-label:first-child {
+.customInput {
+  display: inline-block;
   width: 1.3rem;
   height: 1.3rem;
   border: solid 1.5px $color-header-footer;
   background: transparent;
   color: $color-header-footer;
   text-align: center;
+  cursor: pointer;
+}
+.customInput:hover {
+  @include hover;
+}
+.input:checked + .customInput {
+  background: url("../../assets/image/check.svg") no-repeat center;
+}
+.task {
+  display: flex;
+  justify-content: space-between;
+}
+.subtask {
+  display: none;
+}
+.show {
+  display: block;
 }
 </style>
