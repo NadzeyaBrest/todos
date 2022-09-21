@@ -47,9 +47,9 @@ export default new Vuex.Store({
     getActiveTask(state) {
       return state.activeTask;
     },
-    getExistSubTask(state) {
-      return state.todos[state.activeTask]?.subtasks ?? -1;
-    },
+    // getExistSubTask(state) {
+    //   return state.todos[state.activeTask].subtasks;
+    // },
   },
 
   mutations: {
@@ -58,7 +58,17 @@ export default new Vuex.Store({
       state.todos = [];
     },
     successLoading(state, todos) {
-      state.todos = todos;
+      // state.todos = todos;
+      // state.isLoading = false;
+      state.todos = todos.map((todo) => {
+        return {
+          id: todo.id,
+          userId: todo.userId,
+          title: todo.title,
+          completed: todo.completed,
+          subtasks: [],
+        };
+      });
       state.isLoading = false;
       localStorage.todos = JSON.stringify(state.todos);
     },
@@ -98,8 +108,18 @@ export default new Vuex.Store({
     },
     createSubTask(state, newPost) {
       console.log(newPost);
-      state.todos[state.activeTask].subtasks = [newPost];
+      state.todos[state.activeTask].subtasks.unshift(newPost);
       localStorage.todos = JSON.stringify(state.todos);
+      // console.log(newPost);
+      // if (
+      //   state.todos[state.activeTask].subtasks in state.todos[state.activeTask]
+      // ) {
+      //   state.todos = state.todos[state.activeTask].subtasks.unshift(newPost);
+      //   localStorage.todos = JSON.stringify(state.todos);
+      // } else {
+      //   state.todos[state.activeTask].subtasks = [newPost];
+      //   localStorage.todos = JSON.stringify(state.todos);
+      // }
     },
     pushSubTask(state, newPost) {
       console.log(newPost);

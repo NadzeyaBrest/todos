@@ -18,7 +18,16 @@
       </button>
     </div>
     <div :class="[$style.subtask, { [$style.show]: index === getActiveTask }]">
-      <ul></ul>
+      <ul>
+        <!-- <li v-for="subtask of getExistSubTask" :key="subtask.id">
+          {{ subtask.title }}
+        </li> -->
+        <SubTask
+          v-for="subtask of getExistSubTask"
+          :key="subtask.id"
+          :subtask="subtask"
+        />
+      </ul>
       <form @submit.prevent="submit">
         <input type="text" placeholder="Add new task" v-model="title" />
       </form>
@@ -28,6 +37,8 @@
 
 <script>
 import { mapMutations, mapGetters } from "vuex";
+
+import SubTask from "@/components/organisms/SubTask";
 
 export default {
   methods: {
@@ -49,25 +60,12 @@ export default {
       console.log(i);
     },
     submit() {
-      // вот здесь мне непонятно, как установить зависимость от геттера) Просто я хочу проверить, если есть поле сабзадач, я буду в него пушить, а нету, я создам. Можешь подскажешь идею)
-      // if ( getExistSubTask  === -1) {
-      //   this.createSubTask({
-      //     id: Date.now(),
-      //     title: this.title,
-      //     completed: false,
-      //   });
-      // } else {
-      //   this.pushSubTask({
-      //     id: Date.now(),
-      //     title: this.title,
-      //     completed: false,
-      //   });
-      // }
       this.createSubTask({
         id: Date.now(),
         title: this.title,
         completed: false,
       });
+      this.title = "";
     },
   },
   props: {
@@ -88,7 +86,10 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["getActiveTask", "getExistSubTask"]),
+    ...mapGetters(["getActiveTask", "getExistSubTask", "getExistSubTask"]),
+  },
+  components: {
+    SubTask,
   },
 };
 </script>

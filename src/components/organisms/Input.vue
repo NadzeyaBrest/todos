@@ -20,6 +20,7 @@ export default {
         id: Date.now(),
         title: this.title,
         completed: false,
+        subtasks: [],
       });
       this.title = " ";
     },
