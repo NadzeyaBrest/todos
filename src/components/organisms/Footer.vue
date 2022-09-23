@@ -1,6 +1,6 @@
 <template>
   <footer :class="$style.footer">
-    <div>1/{{ getLength }}left</div>
+    <div>{{ getLength }}</div>
     <div :class="$style.buttons">
       <Button
         v-for="button of getAllButton"

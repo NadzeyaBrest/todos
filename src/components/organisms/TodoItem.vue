@@ -1,5 +1,5 @@
 <template>
-  <li :class="$style.item">
+  <li :class="$style.item" @click="showInput($event, index)">
     <div :class="$style.task">
       <label>
         <input
@@ -10,26 +10,28 @@
         />
         <span :class="$style.customInput"></span>
       </label>
-      <div @click="showInput(index)" :class="$style.task">
+      <div :class="$style.task">
         {{ todo.title | upperCase }}
       </div>
       <button @click="removeTask(todo.id)" :class="$style.button">
         &times;
       </button>
     </div>
+    <ul v-if="!todo.completed">
+      <SubTask
+        v-for="subtask of todo.subtasks"
+        :key="subtask.id"
+        :subtask="subtask"
+      />
+    </ul>
     <div :class="[$style.subtask, { [$style.show]: index === getActiveTask }]">
-      <ul>
-        <!-- <li v-for="subtask of getExistSubTask" :key="subtask.id">
-          {{ subtask.title }}
-        </li> -->
-        <SubTask
-          v-for="subtask of getExistSubTask"
-          :key="subtask.id"
-          :subtask="subtask"
-        />
-      </ul>
       <form @submit.prevent="submit">
-        <input type="text" placeholder="Add new task" v-model="title" />
+        <input
+          :class="$style.search"
+          type="text"
+          placeholder=" +  Add new task"
+          v-model="title"
+        />
       </form>
     </div>
   </li>
@@ -47,7 +49,6 @@ export default {
       "changeCompleted",
       "setActiveTask",
       "createSubTask",
-      "pushSubTask",
     ]),
     removeTask(id) {
       this.deleteTask(id);
@@ -55,7 +56,10 @@ export default {
     changeComp(id) {
       this.changeCompleted(id);
     },
-    showInput(i) {
+    showInput(event, i) {
+      if (event.target.tagName === "INPUT") {
+        return;
+      }
       this.setActiveTask(i);
       console.log(i);
     },
@@ -96,7 +100,18 @@ export default {
 
 <style lang="scss" module>
 @import "../../assets/styles/index.scss";
-.item {
+::placeholder {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  color: $color-header-footer;
+}
+.form {
+  display: flex;
+  color: black;
+}
+.item:not(ul) {
   align-items: center;
   background-color: $color-item;
   color: $color-brown;
@@ -104,9 +119,10 @@ export default {
   border-radius: 0.6rem;
   margin-bottom: 1.56rem;
 }
-.task {
+.task:not(:first-child) {
   flex-grow: 1;
   margin-left: 1.5rem;
+  align-items: center;
 }
 .button {
   width: 1.5rem;
@@ -149,5 +165,14 @@ export default {
 }
 .show {
   display: block;
+}
+.search {
+  background-color: $color-input;
+  color: $color-header-footer;
+  padding: 0.81rem 1.25rem;
+  margin-left: -1.25rem;
+  border-radius: 0.6rem;
+  width: calc(27rem - 3px);
+  border: dashed 1px $color-header-footer;
 }
 </style>

@@ -22,7 +22,7 @@ export default {
         completed: false,
         subtasks: [],
       });
-      this.title = " ";
+      this.title = "";
     },
   },
 };
