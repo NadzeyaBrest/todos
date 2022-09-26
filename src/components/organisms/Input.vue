@@ -8,14 +8,9 @@
 import { mapMutations } from "vuex";
 
 export default {
-  date() {
+  data() {
     return {
-      title: " ",
-      // newTAsk: {
-      //   id: Date.now(),
-      //   title: this.title,
-      //   checked: false,
-      // },
+      title: "",
     };
   },
   methods: {
@@ -24,15 +19,16 @@ export default {
       this.createTask({
         id: Date.now(),
         title: this.title,
-        checked: false,
+        completed: false,
+        subtasks: [],
       });
-      this.title = " ";
+      this.title = "";
     },
   },
 };
 </script>
 
-<style lang="scss" module>
+<style lang="scss" scoped>
 @import "../../assets/styles/index.scss";
 input {
   background-color: $color-input;
@@ -49,5 +45,8 @@ input {
   line-height: 1.75rem;
   text-align: center;
   color: $color-header-footer;
+}
+input:hover {
+  border: solid 1px $color-header-footer;
 }
 </style>

@@ -1,0 +1,4 @@
+@mixin hover{
+    color: $color-button-pressed;
+    border: solid 1.5px $color-button-pressed;
+}

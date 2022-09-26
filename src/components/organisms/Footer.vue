@@ -1,6 +1,6 @@
 <template>
   <footer :class="$style.footer">
-    <div>1/3left</div>
+    <div>{{ getLength }}</div>
     <div :class="$style.buttons">
       <Button
         v-for="button of getAllButton"
@@ -16,7 +16,7 @@ import Button from "../atoms/Button";
 import { mapGetters } from "vuex";
 
 export default {
-  computed: mapGetters(["getAllButton"]),
+  computed: mapGetters(["getAllButton", "getLength"]),
   components: {
     Button,
   },
@@ -39,17 +39,12 @@ export default {
 }
 
 .buttons {
+  display: flex;
   align-items: center;
   justify-content: space-between;
   width: 55%;
 }
 .buttons :not(button:first-child) {
   margin-left: 1.5rem;
-}
-button:first-child {
-  border: solid 1px $color-buttons-footer;
-  color: $color-buttons-footer;
-  padding: 1px 0.25rem;
-  border-radius: 0.5rem;
 }
 </style>
